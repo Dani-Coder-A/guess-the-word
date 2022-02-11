@@ -51,7 +51,7 @@ guessButton.addEventListener("click", function (e) {
 
 //Create Function to check player's input
 const validateInput = function(input) {
-    const acceptedLetter = /[a-zA-z]/;
+    const acceptedLetter = /[a-zA-Z]/;
     //Is input empty?
     if(input.length === 0) {message.innerText = "Please enter a letter."}
     //Did player type more than one letter?
@@ -70,5 +70,46 @@ const makeGuess = function(guess) {
     }
     else {guessedLetters.push(guess);
     console.log(guessedLetters);
+    showGuessedLetters();
+    updateWordInProgress(guessedLetters);
+    }
+};
+
+//Create Function to display guessed letters
+const showGuessedLetters = function () {
+    //Clear the unordered list
+    guessedLettersElement.innerHTML = "";
+    //Create list item for every letter loop through array
+    for(const letter of guessedLetters) {
+    const li = document.createElement("li");
+    li.innerText = letter;
+    guessedLettersElement.append(li);
+    }
+};
+
+//Create Function to update word in progress
+const updateWordInProgress = function(guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    //Split the word string into array elements
+    const wordArray = wordUpper.split("");
+    //console.log(wordArray);
+    //Create new array where letters or circles will be pushed to
+    const revealWord = [];
+    for(const letter of wordArray) {
+        if(guessedLetters.includes(letter)){
+        revealWord.push(letter.toUpperCase());
+        }
+        else {revealWord.push("●")}      
+    }
+    //Update empty paragraph of the word & join to make it a string again
+    wordInProgress.innerText = revealWord.join("");
+    checkIfWin();
+}
+
+//Create Function to check if the player won
+const checkIfWin = function () {
+    if(word.toUpperCase() === wordInProgress.innerText) {
+    message.classList.add("win");    
+    message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`  
     }
 }
